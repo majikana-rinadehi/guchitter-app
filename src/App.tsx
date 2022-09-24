@@ -12,27 +12,27 @@ import {
   Button,
   Wrap,
   WrapItem,
-  Stack,
-  IconButton,
   HStack,
   Switch,
   Text
 } from "@chakra-ui/react"
 import { useLayoutEffect, useRef, useState } from "react"
-import { ColorModeSwitcher } from "./ColorModeSwitcher"
+import { ColorModeSwitcher } from "./components/ColorModeSwitcher"
 import { Fukidashi } from "./components/Fukidashi"
 import { avatarList } from "./data/AvatarList"
-import { guchiList as initGuchiList } from "./data/GuchiList"
 import { convert } from "./util/TextConverter"
+import { addGuchi, guchiSelector } from "./features/guchi/guchiSlice"
+import { useAppDispatch, useAppSelector } from "./app/hooks"
 
 export const App = () => {
 
   const [guchiText, setGuchiText] = useState('')
-  const [guchiList, setGuchiList] = useState(initGuchiList)
   const [selectedAvatarId, setSelectedAvatarId] = useState('1')
   const [isAutoConvert, setIsAutoConvert] = useState(true)
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
   const scrollButtomRef = useRef<HTMLDivElement>(null)
+  const guchiList = useAppSelector(guchiSelector)
+  const dispatch = useAppDispatch()
 
   const placeHolder = '(ΦωΦ)ぐちを入力してください(ΦωΦ)'
   const selectedAvatarSuffix = avatarList.find(avatar => avatar.id === selectedAvatarId)!.suffix
@@ -47,13 +47,10 @@ export const App = () => {
 
   const onClickGuchiButton = () => {
     if (guchiText) {
-      setGuchiList([
-        ...guchiList, 
-        { 
-          guchiText : isAutoConvert ? convert(guchiText, selectedAvatarSuffix) : guchiText,
-          avatarId: selectedAvatarId
-        }
-      ])
+      dispatch(addGuchi({
+        guchiText: isAutoConvert ? convert(guchiText, selectedAvatarSuffix) : guchiText,
+        avatarId: selectedAvatarId
+      }))
     }
     textAreaRef.current!.value = ''
   }
