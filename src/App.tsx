@@ -12,18 +12,25 @@ import {
   Button,
   Wrap,
   WrapItem,
-  Stack
+  Stack,
+  IconButton,
+  HStack,
+  Switch,
+  Text
 } from "@chakra-ui/react"
 import { useLayoutEffect, useRef, useState } from "react"
+import { ColorModeSwitcher } from "./ColorModeSwitcher"
 import { Fukidashi } from "./components/Fukidashi"
 import { avatarList } from "./data/AvatarList"
 import { guchiList as initGuchiList } from "./data/GuchiList"
+import { convert } from "./util/TextConverter"
 
 export const App = () => {
 
   const [guchiText, setGuchiText] = useState('')
   const [guchiList, setGuchiList] = useState(initGuchiList)
   const [selectedAvatarId, setSelectedAvatarId] = useState('1')
+  const [isAutoConvert, setIsAutoConvert] = useState(true)
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
   const scrollButtomRef = useRef<HTMLDivElement>(null)
 
@@ -40,7 +47,12 @@ export const App = () => {
 
   const onClickGuchiButton = () => {
     if (guchiText) {
-      setGuchiList([...guchiList, { guchiText }])
+      setGuchiList([
+        ...guchiList, 
+        { 
+          guchiText : isAutoConvert ? convert(guchiText) : guchiText
+        }
+      ])
     }
     textAreaRef.current!.value = ''
   }
@@ -52,6 +64,9 @@ export const App = () => {
   return (
     <ChakraProvider theme={theme}>
       <Box textAlign="center" fontSize="xl">
+        <HStack justifyContent={'flex-end'}>
+          <ColorModeSwitcher mr={'2'}></ColorModeSwitcher>
+        </HStack>
         <Grid gridTemplateRows={'3fr 1.5fr 1fr'} minH="90vh" p={3}>
           <Box
             height={'300px'} overflowY={'scroll'}
@@ -75,10 +90,18 @@ export const App = () => {
               ref={textAreaRef}
               onChange={(e) => setGuchiText(e.target.value)}
               placeholder={placeHolder} />
-            <Flex width={'300px'}>
+            <Flex width={'300px'} alignItems={'center'}>
               <Button onClick={() => onClickGuchiButton()} mr={'auto'}>
                 グチる
               </Button>
+              <Box mr={'auto'}>
+                <Switch 
+                  onChange={(e) => setIsAutoConvert(e.target.checked)} 
+                  id={'auto-convert'}
+                  defaultChecked={true}
+                  ></Switch>
+                <Text fontSize={'xx-small'}>自動変換</Text>
+              </Box>
               <Wrap>
                 {avatarList.map(avatar => {
                   return (
