@@ -17,7 +17,7 @@ export const convert = (convertText: string): string => {
  */
 const nyanConvert = (convertText: string): string => {
     const NYAN_SUFFIX = 'にゃ'
-    const markList = ['!', '?', '。']
+    const markList = ['!','！', '?','？', '。']
 
     /** '!','?', '。'が最初に現れる位置 */
     const firstMarkIndex = convertText.split('').findIndex(c => markList.includes(c))
