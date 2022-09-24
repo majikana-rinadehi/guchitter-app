@@ -35,7 +35,7 @@ export const App = () => {
   const scrollButtomRef = useRef<HTMLDivElement>(null)
 
   const placeHolder = '(ΦωΦ)ぐちを入力してください(ΦωΦ)'
-  const selectedAvatarUrl = avatarList.find(avatar => avatar.id === selectedAvatarId)?.url
+  const selectedAvatarSuffix = avatarList.find(avatar => avatar.id === selectedAvatarId)!.suffix
   const selectedAvatarColor = avatarList.find(avatar => avatar.id === selectedAvatarId)?.color
 
   useLayoutEffect(() => {
@@ -50,7 +50,8 @@ export const App = () => {
       setGuchiList([
         ...guchiList, 
         { 
-          guchiText : isAutoConvert ? convert(guchiText) : guchiText
+          guchiText : isAutoConvert ? convert(guchiText, selectedAvatarSuffix) : guchiText,
+          avatarId: selectedAvatarId
         }
       ])
     }
@@ -76,10 +77,12 @@ export const App = () => {
             boxShadow={'0 1.5em 1em -1em rgb(109 101 101) inset'}
           >
             {guchiList.map(guchi => {
+              const avatarUrl = avatarList.find(avatar => avatar.id === guchi.avatarId)?.url
+              const avatarColor = avatarList.find(avatar => avatar.id === guchi.avatarId)?.color
               return (
                 <Flex mt={5} gap={3}>
-                  <Fukidashi bgColor={selectedAvatarColor} text={guchi.guchiText} />
-                  <Avatar name="NH" src={selectedAvatarUrl} />
+                  <Fukidashi bgColor={avatarColor} text={guchi.guchiText} />
+                  <Avatar name="NH" src={avatarUrl} />
                 </Flex>
               )
             })}
@@ -87,6 +90,7 @@ export const App = () => {
           </Box>
           <VStack justifyContent={'flex-end'} pb={4}>
             <Textarea
+              outline={`solid 5px ${selectedAvatarColor}`}
               ref={textAreaRef}
               onChange={(e) => setGuchiText(e.target.value)}
               placeholder={placeHolder} />

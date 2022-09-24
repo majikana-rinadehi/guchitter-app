@@ -3,7 +3,8 @@ type Avatar = {
     name: string
     url: string,
     color: string,
-    guchiExample?: string
+    guchiExample?: string,
+    suffix: string
   }
 
 export const avatarList: Avatar[] = [
@@ -12,20 +13,23 @@ export const avatarList: Avatar[] = [
       name: 'nyanko',
       url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDilPlv3VM_vfLX3E8XKKS_VozQaPA0gi4ScEECZM&s",
       color: '#63B3ED',
-      guchiExample: 'ふざけんにゃ!'
+      guchiExample: 'ふざけんにゃ!',
+      suffix: 'にゃ'
     },
     {
       id: '2',
       name: 'Nino',
       url: "https://pbs.twimg.com/media/EcW6HMUU0AAkPGe.jpg",
       color: '#D53F8C',
-      guchiExample: 'ふざけんななのよ!'
+      guchiExample: 'ふざけんななのよ!',
+      suffix: 'なのよ'
     },
     {
       id: '3',
       name: 'Yukari',
       url: 'https://aivoice.jp/wp-content/uploads/2022/03/yukari_pic1.png',
       color: '#9F7AEA',
-      guchiExample: 'ふざけないでください。'
+      guchiExample: 'ふざけないでください。',
+      suffix: 'ください'
     },
   ]
