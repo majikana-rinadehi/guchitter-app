@@ -1,9 +1,9 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
-import guchiReducer from '../features/guchi/guchiSlice'
+import complaintReducer from '../features/complaint/complaintSlice'
 
 export const store = configureStore({
     reducer: {
-        guchi: guchiReducer
+        complaint: complaintReducer
     }
 })
 

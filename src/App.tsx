@@ -21,17 +21,18 @@ import { ColorModeSwitcher } from "./components/ColorModeSwitcher"
 import { Fukidashi } from "./components/Fukidashi"
 import { avatarList } from "./data/AvatarList"
 import { convert } from "./util/TextConverter"
-import { addGuchi, guchiSelector } from "./features/guchi/guchiSlice"
+import { addComplaint, fetch, complaintSelector } from "./features/complaint/complaintSlice"
 import { useAppDispatch, useAppSelector } from "./app/hooks"
 
 export const App = () => {
 
-  const [guchiText, setGuchiText] = useState('')
+  const [complaintText, setComplaintText] = useState('')
   const [selectedAvatarId, setSelectedAvatarId] = useState('1')
   const [isAutoConvert, setIsAutoConvert] = useState(true)
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
   const scrollButtomRef = useRef<HTMLDivElement>(null)
-  const guchiList = useAppSelector(guchiSelector)
+  const complaintList = useAppSelector(complaintSelector)
+  const complaintStatus = useAppSelector(state => state.complaint.status)
   const dispatch = useAppDispatch()
 
   const placeHolder = '(ΦωΦ)ぐちを入力してください(ΦωΦ)'
@@ -39,19 +40,20 @@ export const App = () => {
   const selectedAvatarColor = avatarList.find(avatar => avatar.id === selectedAvatarId)?.color
 
   useLayoutEffect(() => {
+    if(complaintStatus === 'idle') {
+      dispatch(fetch())
+    }
     // 初期表示/愚痴ボタン押下時、最新のぐちが表示されるようスクロールする。
     // alignToTop
     // false の場合、要素の下端がスクロール可能祖先の表示範囲の下端に来るようにスクロールします。
     scrollButtomRef.current?.scrollIntoView(false)
-  }, [guchiList])
+  }, [complaintStatus])
 
-  const onClickGuchiButton = () => {
-    if (guchiText) {
-      dispatch(addGuchi({
-        guchiText: isAutoConvert ? convert(guchiText, selectedAvatarSuffix) : guchiText,
-        avatarId: selectedAvatarId
-      }))
-    }
+  const onClickComplaintButton = () => {
+    dispatch(addComplaint({
+      complaintText: isAutoConvert ? convert(complaintText, selectedAvatarSuffix) : complaintText,
+      avatarId: selectedAvatarId
+    }))
     textAreaRef.current!.value = ''
   }
 
@@ -73,12 +75,12 @@ export const App = () => {
             // x方向offset, y方向offset, ぼかし, 広がり, 色, inset
             boxShadow={'0 1.5em 1em -1em rgb(109 101 101) inset'}
           >
-            {guchiList.map(guchi => {
-              const avatarUrl = avatarList.find(avatar => avatar.id === guchi.avatarId)?.url
-              const avatarColor = avatarList.find(avatar => avatar.id === guchi.avatarId)?.color
+            {complaintList.map(complaint => {
+              const avatarUrl = avatarList.find(avatar => avatar.id === complaint.avatarId)?.url
+              const avatarColor = avatarList.find(avatar => avatar.id === complaint.avatarId)?.color
               return (
                 <Flex mt={5} gap={3}>
-                  <Fukidashi bgColor={avatarColor} text={guchi.guchiText} />
+                  <Fukidashi bgColor={avatarColor} text={complaint.complaintText} />
                   <Avatar name="NH" src={avatarUrl} />
                 </Flex>
               )
@@ -89,10 +91,10 @@ export const App = () => {
             <Textarea
               outline={`solid 5px ${selectedAvatarColor}`}
               ref={textAreaRef}
-              onChange={(e) => setGuchiText(e.target.value)}
+              onChange={(e) => setComplaintText(e.target.value)}
               placeholder={placeHolder} />
             <Flex width={'300px'} alignItems={'center'}>
-              <Button onClick={() => onClickGuchiButton()} mr={'auto'}>
+              <Button onClick={() => onClickComplaintButton()} mr={'auto'}>
                 グチる
               </Button>
               <Box mr={'auto'}>
@@ -120,7 +122,7 @@ export const App = () => {
           <VStack spacing={4}>
             <Heading as='h2' size='2xl'>
               <Mark bg='black' color='white' borderRadius='base' p='1'>
-                Guchi Center
+                Complaint Center
               </Mark>
 
             </Heading>
