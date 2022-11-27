@@ -46,6 +46,10 @@ export const App = () => {
     // 初期表示/愚痴ボタン押下時、最新のぐちが表示されるようスクロールする。
     // alignToTop
     // false の場合、要素の下端がスクロール可能祖先の表示範囲の下端に来るようにスクロールします。
+    // TODO for debug
+    console.log(`
+    REACT_APP_API_URL:${process.env.REACT_APP_API_URL}
+    `)
     scrollButtomRef.current?.scrollIntoView(false)
   }, [complaintStatus])
 

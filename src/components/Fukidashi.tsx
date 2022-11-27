@@ -2,7 +2,9 @@ import { Box, Text } from "@chakra-ui/react"
 import { FunctionComponent } from "react"
 
 type Props = {
+    /** 吹き出しテキスト */
     text?: string,
+    /** 吹き出し背景色 */
     bgColor?: string
 }
 

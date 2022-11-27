@@ -1,7 +1,8 @@
-import axios from 'axios' 
+import { Complaint } from '../complaintSlice'
+import { axiosInstance } from '../../../api/axiosInstance'
 
 export async function getComplaints(): Promise<any> {
-    return await axios.get('http://localhost:8080/complaints')
+    return await axiosInstance.get('/complaints')
         .then(res => {
             console.log(`get /complaints res:`, res) 
             console.log(res.data)
@@ -10,6 +11,20 @@ export async function getComplaints(): Promise<any> {
         .catch(err => {
             console.log(err)
         })
+}
+
+export async function createComplaint(req: Complaint): Promise<Complaint> {
+    const result:Complaint = await axiosInstance.post<Complaint>('/complaints', req)
+        .then(res => {
+            console.log(`get /complaints res:`, res) 
+            console.log(res.data)
+            return res.data
+        })
+        .catch(err => {
+            console.log(err)
+            return err
+        })
+    return result
 }
 
 // レスポンス
