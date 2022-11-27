@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 // import { fetchComplaints } from "../../api/mock";
 import { AppState } from "../../app/store";
-import { getComplaints, createComplaint } from "./api/complaints";
+import { getDatesYYYY_MM_DD } from "../../util/util";
+import { createComplaint, getComplaintsByTimestamp } from "./api/complaints";
 
 export type Complaint = {
     complaintText: string,
@@ -24,7 +25,9 @@ export const fetch = createAsyncThunk(
     'complaint/fetch',
     async () => {
         console.log('start complaint/fetch')
-        const response = await getComplaints()
+        const date = new Date()
+        const {from, to} = getDatesYYYY_MM_DD(date, 1)
+        const response = await getComplaintsByTimestamp(from, to)
         console.log('response:', response)
         return response.data
     }

@@ -13,6 +13,24 @@ export async function getComplaints(): Promise<any> {
         })
 }
 
+export async function getComplaintsByTimestamp(from: string, to: string): Promise<any> {
+    return await axiosInstance
+        .get('/complaints/between-time', {
+            params: {
+                from,
+                to
+            }
+        })
+        .then(res => {
+            console.log(`get /complaints res:`, res) 
+            console.log(res.data)
+            return res
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
+
 export async function createComplaint(req: Complaint): Promise<Complaint> {
     const result:Complaint = await axiosInstance.post<Complaint>('/complaints', req)
         .then(res => {
