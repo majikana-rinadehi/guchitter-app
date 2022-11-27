@@ -79,16 +79,22 @@ export const App = () => {
             // x方向offset, y方向offset, ぼかし, 広がり, 色, inset
             boxShadow={'0 1.5em 1em -1em rgb(109 101 101) inset'}
           >
-            {complaintList.map(complaint => {
-              const avatarUrl = avatarList.find(avatar => avatar.id === complaint.avatarId)?.url
-              const avatarColor = avatarList.find(avatar => avatar.id === complaint.avatarId)?.color
-              return (
-                <Flex mt={5} gap={3}>
-                  <Fukidashi bgColor={avatarColor} text={complaint.complaintText} />
-                  <Avatar name="NH" src={avatarUrl} />
-                </Flex>
-              )
-            })}
+            {
+              Array.isArray(complaintList)
+              ?
+              complaintList.map(complaint => {
+                const avatarUrl = avatarList.find(avatar => avatar.id === complaint.avatarId)?.url
+                const avatarColor = avatarList.find(avatar => avatar.id === complaint.avatarId)?.color
+                return (
+                  <Flex mt={5} gap={3}>
+                    <Fukidashi bgColor={avatarColor} text={complaint.complaintText} />
+                    <Avatar name="NH" src={avatarUrl} />
+                  </Flex>
+                )
+              })
+              :
+              null
+          }
             <div ref={scrollButtomRef}></div>
           </Box>
           <VStack justifyContent={'flex-end'} pb={4}>
