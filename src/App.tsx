@@ -14,15 +14,25 @@ import {
   WrapItem,
   HStack,
   Switch,
-  Text
+  Text,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Image
 } from "@chakra-ui/react"
-import { useLayoutEffect, useRef, useState } from "react"
+import { LegacyRef, useLayoutEffect, useRef, useState } from "react"
 import { ColorModeSwitcher } from "./components/ColorModeSwitcher"
 import { Fukidashi } from "./components/Fukidashi"
 import { avatarList } from "./data/AvatarList"
 import { convert } from "./util/TextConverter"
 import { addComplaint, fetch, complaintSelector } from "./features/complaint/complaintSlice"
 import { useAppDispatch, useAppSelector } from "./app/hooks"
+import { ScreenShotModal } from "./components/ScreenShotModal"
 
 export const App = () => {
 
@@ -30,6 +40,7 @@ export const App = () => {
   const [selectedAvatarId, setSelectedAvatarId] = useState('1')
   const [isAutoConvert, setIsAutoConvert] = useState(true)
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
+  const complaintAreaRef = useRef(null)
   const scrollButtomRef = useRef<HTMLDivElement>(null)
   const complaintList = useAppSelector(complaintSelector)
   const complaintStatus = useAppSelector(state => state.complaint.status)
@@ -40,7 +51,7 @@ export const App = () => {
   const selectedAvatarColor = avatarList.find(avatar => avatar.id === selectedAvatarId)?.color
 
   useLayoutEffect(() => {
-    if(complaintStatus === 'idle') {
+    if (complaintStatus === 'idle') {
       dispatch(fetch())
     }
     // 初期表示/愚痴ボタン押下時、最新のぐちが表示されるようスクロールする。
@@ -54,10 +65,12 @@ export const App = () => {
   }, [complaintStatus])
 
   const onClickComplaintButton = () => {
+    if (complaintText == '') return
     dispatch(addComplaint({
       complaintText: isAutoConvert ? convert(complaintText, selectedAvatarSuffix) : complaintText,
       avatarId: selectedAvatarId
     }))
+    setComplaintText('')
     textAreaRef.current!.value = ''
   }
 
@@ -69,10 +82,12 @@ export const App = () => {
     <ChakraProvider theme={theme}>
       <Box textAlign="center" fontSize="xl">
         <HStack justifyContent={'flex-end'}>
+          <ScreenShotModal captureRef={complaintAreaRef} />
           <ColorModeSwitcher mr={'2'}></ColorModeSwitcher>
         </HStack>
         <Grid gridTemplateRows={'3fr 1.5fr 1fr'} minH="90vh" p={3}>
           <Box
+            ref={complaintAreaRef}
             height={'300px'} overflowY={'scroll'}
             justifyContent={'flex-end'} mt={'5'} rowGap={4}
             // boxShadowのプロパティ
@@ -81,20 +96,20 @@ export const App = () => {
           >
             {
               Array.isArray(complaintList)
-              ?
-              complaintList.map(complaint => {
-                const avatarUrl = avatarList.find(avatar => avatar.id === complaint.avatarId)?.url
-                const avatarColor = avatarList.find(avatar => avatar.id === complaint.avatarId)?.color
-                return (
-                  <Flex mt={5} gap={3}>
-                    <Fukidashi bgColor={avatarColor} text={complaint.complaintText} />
-                    <Avatar name="NH" src={avatarUrl} />
-                  </Flex>
-                )
-              })
-              :
-              null
-          }
+                ?
+                complaintList.map((complaint, key) => {
+                  const avatarUrl = avatarList.find(avatar => avatar.id === complaint.avatarId)?.url
+                  const avatarColor = avatarList.find(avatar => avatar.id === complaint.avatarId)?.color
+                  return (
+                    <Flex key={key} mt={5} gap={3}>
+                      <Fukidashi key={key} bgColor={avatarColor} text={complaint.complaintText} />
+                      <Avatar name="NH" src={avatarUrl} />
+                    </Flex>
+                  )
+                })
+                :
+                null
+            }
             <div ref={scrollButtomRef}></div>
           </Box>
           <VStack justifyContent={'flex-end'} pb={4}>
@@ -108,11 +123,11 @@ export const App = () => {
                 グチる
               </Button>
               <Box mr={'auto'}>
-                <Switch 
-                  onChange={(e) => setIsAutoConvert(e.target.checked)} 
+                <Switch
+                  onChange={(e) => setIsAutoConvert(e.target.checked)}
                   id={'auto-convert'}
                   defaultChecked={true}
-                  ></Switch>
+                ></Switch>
                 <Text fontSize={'xx-small'}>自動変換</Text>
               </Box>
               <Wrap>
@@ -134,7 +149,6 @@ export const App = () => {
               <Mark bg='black' color='white' borderRadius='base' p='1'>
                 Complaint Center
               </Mark>
-
             </Heading>
           </VStack>
         </Grid>

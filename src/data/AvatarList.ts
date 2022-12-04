@@ -1,3 +1,7 @@
+import img_nino from '../static/Nino.jpeg'
+import img_nyanko from '../static/Nyanko.png'
+import img_yukari from '../static/Yukari.png'
+
 type Avatar = {
     id: string,
     name: string
@@ -11,7 +15,7 @@ export const avatarList: Avatar[] = [
     {
       id: '1',
       name: 'nyanko',
-      url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDilPlv3VM_vfLX3E8XKKS_VozQaPA0gi4ScEECZM&s",
+      url: img_nyanko,
       color: '#63B3ED',
       guchiExample: 'ふざけんにゃ!',
       suffix: 'にゃ'
@@ -19,7 +23,7 @@ export const avatarList: Avatar[] = [
     {
       id: '2',
       name: 'Nino',
-      url: "https://pbs.twimg.com/media/EcW6HMUU0AAkPGe.jpg",
+      url: img_nino,
       color: '#D53F8C',
       guchiExample: 'ふざけんななのよ!',
       suffix: 'なのよ'
@@ -27,7 +31,7 @@ export const avatarList: Avatar[] = [
     {
       id: '3',
       name: 'Yukari',
-      url: 'https://aivoice.jp/wp-content/uploads/2022/03/yukari_pic1.png',
+      url: img_yukari,
       color: '#9F7AEA',
       guchiExample: 'ふざけないでください。',
       suffix: 'ください'
