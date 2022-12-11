@@ -4,7 +4,11 @@ import * as htmlToImage from "html-to-image"
 
 type Props = {
     /** キャプチャ領域のRef */
-    captureRef: React.MutableRefObject<null>
+    captureRef: any
+    // HACK: 脱any
+    // captureRef: React.MutableRefObject<null>
+    /** キャプチャ領域の高さ */
+    captureHeight: number
 }
 
 export const ScreenShotModal: FunctionComponent<Props> = (props) => {
@@ -17,9 +21,11 @@ export const ScreenShotModal: FunctionComponent<Props> = (props) => {
         // https://stackoverflow.com/questions/71190946/created-image-with-use-react-screenshot-is-incorrectly-rendered
         const node = props.captureRef.current
         if (!node) return
-        const captureURI = await htmlToImage.toJpeg(node)
-          .then(res => res)
-          .catch(e => console.log(e))
+        console.log('props.captureHeight',props.captureHeight)
+        const captureURI = await htmlToImage
+            .toJpeg(node, {height: props.captureHeight})
+            .then(res => res)
+            .catch(e => console.log(e))
         if (!captureURI) return
         setCaptureURI(captureURI)
         onOpen()

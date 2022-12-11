@@ -10,8 +10,10 @@ export type Complaint = {
 }
 
 type ComplaintState = {
+    /** complaintの配列 */
     complaint: Complaint[],
-    status: string,
+    /** action の状態。extraReducersの各ケースの中で、actionの`type`に応じて明示的に設定する必要がある。 */
+    status: 'idle' | 'pending' | 'fulfilled' | 'rejected',
     error: null
 }
 
@@ -26,7 +28,7 @@ export const fetch = createAsyncThunk(
     async () => {
         console.log('start complaint/fetch')
         const date = new Date()
-        const {from, to} = getDatesYYYY_MM_DD(date, 1)
+        const { from, to } = getDatesYYYY_MM_DD(date, 1)
         const response = await getComplaintsByTimestamp(from, to)
         console.log('response:', response)
         return response.data
@@ -50,25 +52,42 @@ export const complaintSlice = createSlice({
     },
     extraReducers(builder) {
         builder
-            .addCase(fetch.pending,(state, action) => {console.log('pending')})
+            /** fetch */
+            .addCase(fetch.pending, (state, action) => {
+                console.log('fetch:pending')
+                state.status = 'pending'
+            })
             .addCase(fetch.fulfilled, (state, action) => {
-                console.log('action.payload:', action.payload)
+                console.log('fetch:fulfilled')
                 // this doesn't work
                 // state = state.concat(action.payload)
 
                 // this doesn't work
                 // state = action.payload
                 state.complaint = action.payload
-                console.log('state:', state)
-                // state.status = 'fullfilled'
+                state.status = 'fulfilled'
             })
-            .addCase(fetch.rejected,(state, action) => { console.log('rejected')})
+            .addCase(fetch.rejected, (state, action) => {
+                console.log('fetch:rejected')
+                state.status = 'rejected'
+            })
+            /** add */
+            .addCase(addComplaint.pending, (state, action) => {
+                console.log('addComplaint:pending')
+                state.status = 'pending'
+            })
             .addCase(addComplaint.fulfilled, (state, action) => {
-                console.log('action.payload:', action.payload)
+                console.log('addComplaint:fulfilled')
                 state.complaint.push(
                     action.payload
                 )
+                state.status = 'fulfilled'
             })
+            .addCase(addComplaint.rejected, (state, action) => {
+                console.log('addComplaint:rejected')
+                state.status = 'rejected'
+            })
+
     },
 })
 
