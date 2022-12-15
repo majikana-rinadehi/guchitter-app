@@ -5,13 +5,14 @@ import {
     ForwardRefRenderFunction } 
 from "react"
 
-// メソッドのインターフェースを公開する
+// 親コンポーネントに公開するメソッドのインターフェース
 export type Handles = {
     openModal: () => void
 }
 
 export type Props = {
     top: number
+    onClickDelete: () => void
 }
 
 // 参考: https://qiita.com/sugasaki/items/c541a95754905f423fbd
@@ -27,17 +28,30 @@ const RightClickModalComponent: ForwardRefRenderFunction<Handles,Props> = (props
         }
     }))
 
+    /** 削除ボタン押下時 */
+    const onClickDelete = () => {
+        onClose()
+        props.onClickDelete()
+    }
+
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
-            <ModalOverlay opacity={1}/>
+            {/* 透明なオーバーレイ */}
+            <ModalOverlay bg={"blackAlpha.0"}/>
             <ModalContent
                 top={props.top}
                 left={10}
-                width={100}
-            >
-                <ModalBody>
+                width={"fit-content"}
+                borderRadius={"10rem"}
+                >
+                <ModalBody
+                    borderRadius={"10rem"}
+                    bg={"gray.600"}>
                     <Box>
-                        <Button>削除</Button>
+                        <Button 
+                            onClick={() => onClickDelete()}
+                            fontSize={"1rem"}
+                        >削除</Button>
                     </Box>
                 </ModalBody>
             </ModalContent>
