@@ -14,18 +14,8 @@ import {
   WrapItem,
   HStack,
   Switch,
-  Text,
-  useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
-  ModalBody,
-  ModalFooter,
-  Image
-} from "@chakra-ui/react"
-import { LegacyRef, useEffect, useLayoutEffect, useRef, useState } from "react"
+  Text} from "@chakra-ui/react"
+import { useEffect, useRef, useState } from "react"
 import { ColorModeSwitcher } from "./components/ColorModeSwitcher"
 import { Fukidashi } from "./components/Fukidashi"
 import { avatarList } from "./data/AvatarList"
