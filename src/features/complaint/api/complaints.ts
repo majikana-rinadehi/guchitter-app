@@ -45,6 +45,17 @@ export async function createComplaint(req: Complaint): Promise<Complaint> {
     return result
 }
 
+export async function deleteComplaintById(complaintId: string): Promise<void> {
+    const result:Complaint = await axiosInstance.delete<string>(`/complaints/${complaintId}`)
+        .then(res => {
+            console.log(`delete /complaints/${complaintId} res:`, res) 
+        })
+        .catch(err => {
+            console.log(err)
+            return err
+        })
+}
+
 // レスポンス
 // [
 //     {

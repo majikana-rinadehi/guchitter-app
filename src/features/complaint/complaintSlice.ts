@@ -2,9 +2,10 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 // import { fetchComplaints } from "../../api/mock";
 import { AppState } from "../../app/store";
 import { getDatesYYYY_MM_DD } from "../../util/util";
-import { createComplaint, getComplaintsByTimestamp } from "./api/complaints";
+import { createComplaint, getComplaintsByTimestamp, deleteComplaintById } from "./api/complaints";
 
 export type Complaint = {
+    complaintId?: string
     complaintText: string,
     avatarId: string
 }
@@ -42,6 +43,15 @@ export const addComplaint = createAsyncThunk(
         const response = await createComplaint(req)
         console.log('response:', response)
         return response
+    }
+)
+
+export const deleteComplaint = createAsyncThunk(
+    'complaint/deleteComplaint',
+    async (req: string) => {
+        console.log('start complaint/deleteComplaint')
+        await deleteComplaintById(req)
+        return req
     }
 )
 
@@ -85,6 +95,26 @@ export const complaintSlice = createSlice({
             })
             .addCase(addComplaint.rejected, (state, action) => {
                 console.log('addComplaint:rejected')
+                state.status = 'rejected'
+            })
+            /** delete */
+            .addCase(deleteComplaint.pending, (state, action) => {
+                console.log('deleteComplaint:pending')
+                state.status = 'pending'
+            })
+            .addCase(deleteComplaint.fulfilled, (state, action) => {
+                console.log('deleteComplaint:fulfilled')
+                console.log('action.payload',action.payload)
+                console.log(state.complaint.findIndex(complaint => 
+                    complaint.complaintId === action.payload))
+                state.complaint.splice(
+                    state.complaint.findIndex(complaint => 
+                        complaint.complaintId === action.payload),1
+                )
+                state.status = 'fulfilled'
+            })
+            .addCase(deleteComplaint.rejected, (state, action) => {
+                console.log('deleteComplaint:rejected')
                 state.status = 'rejected'
             })
 
