@@ -14,7 +14,10 @@ import {
   WrapItem,
   HStack,
   Switch,
-  Text} from "@chakra-ui/react"
+  Text,
+  IconButton,
+  AvatarGroup} from "@chakra-ui/react"
+import {AddIcon} from '@chakra-ui/icons'
 import { useEffect, useRef, useState } from "react"
 import { ColorModeSwitcher } from "./components/ColorModeSwitcher"
 import { Fukidashi } from "./components/Fukidashi"
@@ -23,6 +26,7 @@ import { convert } from "./util/TextConverter"
 import { addComplaint, fetch, complaintSelector } from "./features/complaint/complaintSlice"
 import { useAppDispatch, useAppSelector, useGetElementProperty } from "./app/hooks"
 import { ScreenShotModal } from "./components/ScreenShotModal"
+import { AddAvatarModal } from "./features/avatar/AddAvatarModal"
 
 export const App = () => {
 
@@ -140,17 +144,19 @@ export const App = () => {
                 ></Switch>
                 <Text fontSize={'xx-small'}>自動変換</Text>
               </Box>
-              <Wrap>
+              <Wrap align={"center"}>
+                <AvatarGroup size={"md"} max={3}>
                 {avatarList.map(avatar => {
                   return (
-                    <WrapItem>
                       <Avatar
                         onClick={() => onClickAvatar(avatar.id)}
                         size='md' border={avatar.id === selectedAvatarId ? `5px solid ${avatar.color}` : ''} src={avatar.url}>
                       </Avatar>
-                    </WrapItem>
                   )
                 })}
+                </AvatarGroup>
+                {/* アバター追加ボタン */}
+                <AddAvatarModal/>
               </Wrap>
             </Flex>
           </VStack>
