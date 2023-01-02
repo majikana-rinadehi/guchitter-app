@@ -8,6 +8,7 @@ export type Avatar = {
     avatarName: string
     avatarText: string
     imageUrl: string
+    color: string
 }
 
 type AvatarState = {
@@ -24,7 +25,7 @@ const initialState: AvatarState = {
     error: null
 }
 
-export const fetch = createAsyncThunk(
+export const fetchAvatar = createAsyncThunk(
     'avatar/fetch',
     async () => {
         console.log('start avatar/fetch')
@@ -61,11 +62,11 @@ export const avatarSlice = createSlice({
     extraReducers(builder) {
         builder
             /** fetch */
-            .addCase(fetch.pending, (state, action) => {
+            .addCase(fetchAvatar.pending, (state, action) => {
                 console.log('fetch:pending')
                 state.status = 'pending'
             })
-            .addCase(fetch.fulfilled, (state, action) => {
+            .addCase(fetchAvatar.fulfilled, (state, action) => {
                 console.log('fetch:fulfilled')
                 // this doesn't work
                 // state = state.concat(action.payload)
@@ -75,7 +76,7 @@ export const avatarSlice = createSlice({
                 state.avatar = action.payload
                 state.status = 'fulfilled'
             })
-            .addCase(fetch.rejected, (state, action) => {
+            .addCase(fetchAvatar.rejected, (state, action) => {
                 console.log('fetch:rejected')
                 state.status = 'rejected'
             })

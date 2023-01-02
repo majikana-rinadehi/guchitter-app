@@ -1,4 +1,4 @@
-import { useDisclosure, Image, Text, IconButton, Modal, ModalOverlay, ModalContent, Button, ModalBody, ModalHeader, Stack, Input, Wrap, VStack, HStack, Mark } from "@chakra-ui/react"
+import { useDisclosure, Text, IconButton, Modal, ModalOverlay, ModalContent, Button, ModalBody, ModalHeader, Stack, Input, Wrap, VStack, HStack, Mark, Box } from "@chakra-ui/react"
 import { AddIcon } from "@chakra-ui/icons"
 import React, { FunctionComponent, useEffect, useRef, useState } from "react"
 import { ImagePreview } from "../../components/ImagePreview"
@@ -15,10 +15,10 @@ export const AddAvatarModal: FunctionComponent<Props> = (props) => {
     const [file, setFile] = useState<File | null>(null)
     const [imageUrl, setImageUrl] = useState<string>('')
     const [avatarForm, setAvatarForm] 
-        = useState<Omit<Avatar, 'imageUrl'>>({
+        = useState<Omit<Avatar, 'imageUrl' | 'avatarId'>>({
             avatarName:'',
             avatarText:'',
-            avatarId:''
+            color: ''
         })
     /** formのうち指定したプロパティを変更する */
     const handleChange = (input: keyof Avatar) => 
@@ -97,9 +97,21 @@ export const AddAvatarModal: FunctionComponent<Props> = (props) => {
                             <Input 
                                 placeholder="語尾(例:なのよ)"
                                 onChange={handleChange('avatarText')}/>
+                            <HStack>
+                                <Box width={"50%"}>
+                                    <Text marginLeft={"5"} fontWeight={"bold"}>
+                                        色を選択
+                                    </Text>
+                                </Box>
+                                <Input
+                                    type={"color"}
+                                    onChange={handleChange("color")}
+                                />
+                            </HStack>
                             <ImagePreview 
                                 imageUrl={imageUrl}
                                 setImageUrl={setImageUrl}
+                                color={avatarForm.color}
                                 ></ImagePreview>
                             <Wrap display={"flex"} justifyContent={"center"}>
                                 <Button onClick={() => onClickFileUploadButton()}>

@@ -5,6 +5,7 @@ import { FunctionComponent, useEffect, useState } from "react"
 type Props = {
     imageUrl: string
     setImageUrl: (url: string) => void
+    color: string
 }
 
 export const ImagePreview: FunctionComponent<Props> = (props) => {
@@ -22,7 +23,7 @@ export const ImagePreview: FunctionComponent<Props> = (props) => {
                             width={'20%'}/>
                         <Image 
                             maxHeight={'xl'} 
-                            border={'10px solid pink'} 
+                            border={`10px solid ${props.color}`} 
                             src={props.imageUrl}/>
                     </VStack>
                     

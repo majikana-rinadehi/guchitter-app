@@ -24,7 +24,7 @@ const initialState: ComplaintState = {
     error: null
 }
 
-export const fetch = createAsyncThunk(
+export const fetchComplaint = createAsyncThunk(
     'complaint/fetch',
     async () => {
         console.log('start complaint/fetch')
@@ -63,11 +63,11 @@ export const complaintSlice = createSlice({
     extraReducers(builder) {
         builder
             /** fetch */
-            .addCase(fetch.pending, (state, action) => {
+            .addCase(fetchComplaint.pending, (state, action) => {
                 console.log('fetch:pending')
                 state.status = 'pending'
             })
-            .addCase(fetch.fulfilled, (state, action) => {
+            .addCase(fetchComplaint.fulfilled, (state, action) => {
                 console.log('fetch:fulfilled')
                 // this doesn't work
                 // state = state.concat(action.payload)
@@ -77,7 +77,7 @@ export const complaintSlice = createSlice({
                 state.complaint = action.payload
                 state.status = 'fulfilled'
             })
-            .addCase(fetch.rejected, (state, action) => {
+            .addCase(fetchComplaint.rejected, (state, action) => {
                 console.log('fetch:rejected')
                 state.status = 'rejected'
             })
