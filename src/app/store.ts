@@ -1,9 +1,11 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import complaintReducer from '../features/complaint/complaintSlice'
+import avatarReducer from '../features/avatar/avatarSlice'
 
 export const store = configureStore({
     reducer: {
-        complaint: complaintReducer
+        complaint: complaintReducer,
+        avatar: avatarReducer
     }
 })
 
