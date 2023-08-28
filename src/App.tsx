@@ -56,7 +56,7 @@ export const App = () => {
   const avatarStatus = useAppSelector(state => state.avatar.status)
   const dispatch = useAppDispatch()
 
-  const placeHolder = '(ΦωΦ)ぐちを入力してください(ΦωΦ)'
+  const placeHolder = 'つぶやきを入力してください'
 
   const selectedAvatarSuffix = avatarList.find(avatar => avatar.avatarId === selectedAvatarId)?.avatarText
   // TODO: avatarColor を作成
@@ -162,7 +162,7 @@ export const App = () => {
               placeholder={placeHolder} />
             <Flex width={'350px'} alignItems={'center'}>
               <Button onClick={() => onClickComplaintButton()} mr={'auto'}>
-                グチる
+                つぶやく
               </Button>
               <Box mr={'auto'}>
                 <Switch
@@ -193,7 +193,7 @@ export const App = () => {
           <VStack spacing={4}>
             <Heading as='h2' size='2xl'>
               <Mark bg='black' color='white' borderRadius='base' p='1'>
-                Complaint Center
+                Tsubuyaki Center
               </Mark>
             </Heading>
             <HStack>
