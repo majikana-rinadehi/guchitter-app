@@ -17,7 +17,7 @@ export const avatarList: Avatar[] = [
       name: 'nyanko',
       url: img_nyanko,
       color: '#63B3ED',
-      guchiExample: 'ふざけんにゃ!',
+      guchiExample: 'お腹がすきました!',
       suffix: 'にゃ'
     },
     {
@@ -25,7 +25,7 @@ export const avatarList: Avatar[] = [
       name: 'Nino',
       url: img_nino,
       color: '#D53F8C',
-      guchiExample: 'ふざけんななのよ!',
+      guchiExample: '今年も暑すぎるなのよ!',
       suffix: 'なのよ'
     },
     {
@@ -33,7 +33,7 @@ export const avatarList: Avatar[] = [
       name: 'Yukari',
       url: img_yukari,
       color: '#9F7AEA',
-      guchiExample: 'ふざけないでください。',
+      guchiExample: '茶碗洗いはサボらないでください。',
       suffix: 'ください'
     },
   ]
